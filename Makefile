@@ -65,76 +65,46 @@ include ../../../Makefile-Config.mk
 # Display
 #-------------------------------------------------------------------------------
 
-PROMPT              := "    ["$(COLOR_GREEN)" XEOS "$(COLOR_NONE)"]> ["$(COLOR_GREEN)" SRC  "$(COLOR_NONE)"]> ["$(COLOR_GREEN)" LIB  "$(COLOR_NONE)"]> ["$(COLOR_GREEN)" ICNV "$(COLOR_NONE)"]> *** "
-
-#-------------------------------------------------------------------------------
-# Paths
-#-------------------------------------------------------------------------------
-
-DIR_SRC_ICONV       = $(PATH_SRC_LIB_ICONV)iconv/
-
-#-------------------------------------------------------------------------------
-# Search paths
-#-------------------------------------------------------------------------------
-
-# Define the search paths for source files
-vpath %$(EXT_C)         $(PATH_SRC_LIB_ICONV)
-vpath %$(EXT_C)         $(DIR_SRC_ICONV)
-
-#-------------------------------------------------------------------------------
-# File suffixes
-#-------------------------------------------------------------------------------
-
-# Adds the suffixes used in this file
-.SUFFIXES:  $(EXT_ASM_32)   \
-            $(EXT_ASM_64)   \
-            $(EXT_C)        \
-            $(EXT_H)        \
-            $(EXT_OBJ)      \
-            $(EXT_BIN)
+PROMPT  := "    ["$(COLOR_GREEN)" XEOS "$(COLOR_NONE)"]> ["$(COLOR_GREEN)" SRC  "$(COLOR_NONE)"]> ["$(COLOR_GREEN)" LIB  "$(COLOR_NONE)"]> ["$(COLOR_GREEN)" ICNV "$(COLOR_NONE)"]> *** "
 
 #-------------------------------------------------------------------------------
 # Files
 #-------------------------------------------------------------------------------
 
-_FILES_C_OBJ_BUILD              = $(call XEOS_FUNC_C_OBJ,$(PATH_BUILD_32_LIB_OBJ_ICONV),$(PATH_SRC_LIB_ICONV))
-_FILES_C_OBJ_BUILD_ICONV        = $(call XEOS_FUNC_C_OBJ,$(PATH_BUILD_32_LIB_OBJ_ICONV),$(DIR_SRC_ICONV))
+_FILES  = $(call XEOS_FUNC_C_OBJ,$(PATH_SRC_LIB_ICONV))
+_FILES += $(call XEOS_FUNC_C_OBJ,$(PATH_SRC_LIB_ICONV)iconv/)
 
 #-------------------------------------------------------------------------------
 # Built-in targets
 #-------------------------------------------------------------------------------
 
 # Declaration for phony targets, to avoid problems with local files
-.PHONY: all     \
-        clean
+.PHONY: all clean
 
 #-------------------------------------------------------------------------------
 # Phony targets
 #-------------------------------------------------------------------------------
 
 # Build the full project
-all:    $(_FILES_C_OBJ_BUILD_ICONV)   \
-        $(_FILES_C_OBJ_BUILD)
+all: $(_FILES)
 	
 	@$(PRINT) $(PROMPT)$(COLOR_CYAN)"Generating the library archive"$(COLOR_NONE)" [ 32 bits ]: "$(COLOR_GRAY)"libiconv.a"$(COLOR_NONE)
-	@$(AR_32) $(ARGS_AR_32) $(PATH_BUILD_32_LIB_BIN)libiconv.a $(PATH_BUILD_32_LIB_OBJ_ICONV)*$(EXT_OBJ)
-	@$(RANLIB_32) $(PATH_BUILD_32_LIB_BIN)libiconv.a
+	@$(call XEOS_FUNC_LIB_STATIC_32,libiconv,$^)
 	
 	@$(PRINT) $(PROMPT)$(COLOR_CYAN)"Generating the library archive"$(COLOR_NONE)" [ 64 bits ]: "$(COLOR_GRAY)"libiconv.a"$(COLOR_NONE)
-	@$(AR_64) $(ARGS_AR_64) $(PATH_BUILD_64_LIB_BIN)libiconv.a $(PATH_BUILD_64_LIB_OBJ_ICONV)*$(EXT_OBJ)
-	@$(RANLIB_64) $(PATH_BUILD_64_LIB_BIN)libiconv.a
+	@$(call XEOS_FUNC_LIB_STATIC_64,libiconv,$^)
 	
 	@$(PRINT) $(PROMPT)$(COLOR_CYAN)"Generating the dynamic library"$(COLOR_NONE)" [ 32 bits ]: "$(COLOR_GRAY)"libiconv.so"$(COLOR_NONE)
-	@$(LD_32) $(ARGS_LD_SHARED_32) -o $(PATH_BUILD_32_LIB_BIN)libiconv.so $(PATH_BUILD_32_LIB_OBJ_ICONV)*$(EXT_OBJ_PIC)
+	@$(call XEOS_FUNC_LIB_DYNAMIC_32,libiconv,$^)
 	
 	@$(PRINT) $(PROMPT)$(COLOR_CYAN)"Generating the dynamic library"$(COLOR_NONE)" [ 64 bits ]: "$(COLOR_GRAY)"libiconv.so"$(COLOR_NONE)
-	@$(LD_64) $(ARGS_LD_SHARED_64) -o $(PATH_BUILD_64_LIB_BIN)libiconv.so $(PATH_BUILD_64_LIB_OBJ_ICONV)*$(EXT_OBJ_PIC)
+	@$(call XEOS_FUNC_LIB_DYNAMIC_64,libiconv,$^)
 
 # Cleans the build files
 clean:
 	
 	@$(PRINT) $(PROMPT)"Cleaning all build files"
-	@$(RM) $(ARGS_RM) $(PATH_BUILD_32_LIB_OBJ_ICONV)*
-	@$(RM) $(ARGS_RM) $(PATH_BUILD_64_LIB_OBJ_ICONV)*
-	@$(RM) $(ARGS_RM) $(PATH_BUILD_32_LIB_BIN)libiconv.*
-	@$(RM) $(ARGS_RM) $(PATH_BUILD_64_LIB_BIN)libiconv.*
+	@$(RM) $(ARGS_RM) $(PATH_BUILD_32_OBJ)$(subst $(PATH_SRC),,$(PATH_SRC_LIB_ICONV))
+	@$(RM) $(ARGS_RM) $(PATH_BUILD_64_OBJ)$(subst $(PATH_SRC),,$(PATH_SRC_LIB_ICONV))
+	@$(RM) $(ARGS_RM) $(PATH_BUILD_32_BIN)libiconv.*
+	@$(RM) $(ARGS_RM) $(PATH_BUILD_64_BIN)libiconv.*

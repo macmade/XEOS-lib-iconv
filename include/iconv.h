@@ -61,8 +61,8 @@
 
 /* $Id$ */
 
-#ifndef __XEOS_LIB_ICONV_H__
-#define __XEOS_LIB_ICONV_H__
+#ifndef XEOS_LIB_ICONV_H
+#define XEOS_LIB_ICONV_H
 
 #ifdef __cplusplus
 extern "C" {
@@ -79,4 +79,4 @@ iconv_t iconv_open( const char * tocode, const char * fromcode );
 }
 #endif
 
-#endif /* __XEOS_LIB_ICONV_H__ */
+#endif /* XEOS_LIB_ICONV_H */

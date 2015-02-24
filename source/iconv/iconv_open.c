@@ -59,8 +59,6 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-/* $Id$ */
-
 #include <iconv.h>
 
 iconv_t iconv_open( const char * tocode, const char * fromcode )

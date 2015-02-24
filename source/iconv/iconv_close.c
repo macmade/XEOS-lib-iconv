@@ -59,8 +59,6 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
-/* $Id$ */
-
 #include <iconv.h>
 
 int iconv_close( iconv_t cd )

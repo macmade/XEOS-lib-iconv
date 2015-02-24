@@ -59,6 +59,11 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  ******************************************************************************/
 
+/*!
+ * @author          Jean-David Gadina
+ * @copyright       (c) 2010-2015, Jean-David Gadina - www.xs-labs.com
+ */
+
 #include <iconv.h>
 
 size_t iconv( iconv_t cd, char ** restrict inbuf, size_t * restrict inbytesleft, char ** restrict outbuf, size_t * restrict outbytesleft )

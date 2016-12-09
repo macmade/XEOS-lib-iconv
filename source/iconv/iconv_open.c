@@ -70,6 +70,15 @@ iconv_t iconv_open( const char * tocode, const char * fromcode )
 {
     iconv_t cd;
     
+    cd.__reserved[ 0 ] = 0;
+    cd.__reserved[ 1 ] = 0;
+    cd.__reserved[ 2 ] = 0;
+    cd.__reserved[ 3 ] = 0;
+    cd.__reserved[ 4 ] = 0;
+    cd.__reserved[ 5 ] = 0;
+    cd.__reserved[ 6 ] = 0;
+    cd.__reserved[ 7 ] = 0;
+    
     ( void )tocode;
     ( void )fromcode;
     
